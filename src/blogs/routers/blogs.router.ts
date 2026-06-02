@@ -9,20 +9,19 @@ import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guar
 import {inputValidationMiddleware} from "../../core/middlewares/validation/input-validation.middleware";
 import {idValidation} from "../../core/middlewares/validation/id.validation";
 import {createNewPostForBlog} from "./handlers/createNewPostForBlog";
-import {getPostsOfBlog} from "./handlers/getPostsOfBlog";
+import {getPostListOfBlogHandler} from "./handlers/getPostListOfBlog.handler";
 import {postInputValidation} from "../../posts/validation/posts-dto.validation";
 import {
     paginationAndSortingValidation
 } from "../../core/middlewares/validation/query-pagination-sorting.validation-middleware";
-import {BlogSortField} from "./input/blog-sort-field";
-
+import {SortField} from "../../core/types/sort-field";
 
 export const blogsRouter = Router();
 
 blogsRouter
     .get(
         '',
-        paginationAndSortingValidation(BlogSortField),
+        paginationAndSortingValidation(SortField, 'blog'),
         getBlogListHandler
     )
     .get(
@@ -34,7 +33,8 @@ blogsRouter
     .get(
         '/:id/posts',
         idValidation,
-        getPostsOfBlog
+        paginationAndSortingValidation(SortField, 'post'),
+        getPostListOfBlogHandler
     )
     .post(
         '',

@@ -1,10 +1,30 @@
 import {PostCreateUpdateDTO, PostDBModel} from "../types/posts-types";
 import {ObjectId, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
+import {PostQueryInput} from "../routers/input/post-qury.input";
 
 export const postRepository = {
-    async findPostsByBlogId(id: string): Promise<WithId<PostDBModel>[]> {
-        return await postsCollection.find({blogId: id}).toArray();
+    async findPostListByBlogId(id: string, queryDTO: PostQueryInput): Promise<{items: WithId<PostDBModel>[]; totalCount: number}> {
+        const {
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection
+        } = queryDTO;
+
+        const skip = (pageNumber -1) * pageSize;
+        const filter: any = {};
+
+        const items: WithId<PostDBModel>[] = await postsCollection
+            .find(filter)
+            .sort({[sortBy]: sortDirection })
+            .skip(skip)
+            .limit(pageSize)
+            .toArray()
+
+        const totalCount =await postsCollection.countDocuments(filter);
+
+        return { items, totalCount };
     },
 
     async findAll(): Promise<WithId<PostDBModel>[]> {

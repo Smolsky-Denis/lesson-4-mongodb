@@ -1,5 +1,5 @@
 import {BlogQueryInput} from "../routers/input/blog-query.input";
-import {BlogDBModel, BlogViewModel} from "../types/blogs-types";
+import {BlogDBModel} from "../types/blogs-types";
 import {blogRepository} from "../repositories/blogs.repository";
 import {WithId} from "mongodb";
 

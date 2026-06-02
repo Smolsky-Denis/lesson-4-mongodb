@@ -1,14 +1,8 @@
-export type BlogViewModel = {
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
-    createdAt: Date,
-    isMembership: boolean
-}
+import {BlogOutputViewModel} from "../routers/output/blog.output";
+
 
 export type BlogCreateUpdateDTO = Pick<
-    BlogViewModel, 'name' | 'description' | 'websiteUrl'
+    BlogOutputViewModel, 'name' | 'description' | 'websiteUrl'
 >
 
-export type BlogDBModel = Omit<BlogViewModel, 'id'>
+export type BlogDBModel = Omit<BlogOutputViewModel, 'id'>

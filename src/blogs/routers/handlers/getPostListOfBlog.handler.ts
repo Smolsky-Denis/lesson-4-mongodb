@@ -1,0 +1,30 @@
+import {Request, Response} from 'express';
+import {HttpStatus} from "../../../core/types/http-statuses";
+import {postsService} from "../../../posts/application/posts.service";
+import {matchedData} from "express-validator";
+import {PostQueryInput} from "../../../posts/routers/input/post-qury.input";
+import {setDefaultSortAndPaginationIfNotExist} from "../../../core/helpers/set-default-sort-and-pagination";
+import {mapToPostListPaginatedOutput} from "../../../posts/mapers/map-to-post-list-paginated-output.util";
+
+export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res: Response) => {
+    const id: string = req.params.id;
+    const sanitizedQuery = matchedData<PostQueryInput>(req, {
+        locations: ['query'],
+        includeOptionals: true,
+    })
+
+    const queryInput: PostQueryInput = setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post')
+    const {pageNumber, pageSize} = queryInput
+    const {items, totalCount} = await postsService.findMany(id, sanitizedQuery)
+
+    const result = mapToPostListPaginatedOutput(
+        items,
+        {
+            pagesCount: Math.ceil(totalCount / pageSize),
+            page: pageNumber,
+            pageSize: pageSize,
+            totalCount,
+        }
+    )
+    return res.status(HttpStatus.Ok_200).send(result);
+}

@@ -10,8 +10,8 @@ export const getPostList = async (req: Request, res: Response) => {
     const postList = await postRepository.findAll()
     const postViewModel = postList.map(mapToPostViewModel)
 
-    res.status(HttpStatus.Ok).send(postViewModel)
+    res.status(HttpStatus.Ok_200).send(postViewModel)
     } catch (error) {
-        res.sendStatus(HttpStatus.BadRequest)
+        res.sendStatus(HttpStatus.BadRequest_400)
     }
 }

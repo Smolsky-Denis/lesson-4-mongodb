@@ -8,5 +8,5 @@ export const deleteFullData = async (req: Request, res: Response) => {
     await postRepository.deletePostList()
     await blogRepository.deleteBlogList()
 
-    res.sendStatus(HttpStatus.NoContent)
+    res.sendStatus(HttpStatus.NoContent_204)
 }

@@ -10,7 +10,7 @@ export const updatePostById = async (req: Request<{id: string}, {}, PostCreateUp
         const postById = await postRepository.findById(id)
 
         if (!postById) {
-            return res.status(HttpStatus.NotFound).send(createErrorMessages(
+            return res.status(HttpStatus.NotFound_404).send(createErrorMessages(
                 [
                         {
                             field: id, message: `No post with id ${id} found.`
@@ -20,9 +20,9 @@ export const updatePostById = async (req: Request<{id: string}, {}, PostCreateUp
         }
 
         await postRepository.updatePost(id, req.body)
-        return res.sendStatus(HttpStatus.NoContent);
+        return res.sendStatus(HttpStatus.NoContent_204);
 
     } catch (e: unknown){
-        return res.sendStatus(HttpStatus.InternalServerError);
+        return res.sendStatus(HttpStatus.InternalServerError_500);
     }
 }

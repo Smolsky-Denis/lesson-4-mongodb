@@ -6,7 +6,7 @@ export const inputValidationMiddleware = (req: Request, res: Response, next: Nex
     const errors = validationResult(req).array({onlyFirstError: true});
 
     if (errors.length > 0) {
-        return res.status(HttpStatus.BadRequest).json({
+        return res.status(HttpStatus.BadRequest_400).json({
             errorsMessages: errors.map(err  => ({
                 message: err.msg,
                 field: (err as unknown as FieldValidationError).path

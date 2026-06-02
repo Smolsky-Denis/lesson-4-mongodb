@@ -8,6 +8,6 @@ export const getPostById = async (req: Request<{id: string}>, res: Response) => 
         const blogById = await postRepository.findById(id)
 
   return  blogById
-      ? res.status(HttpStatus.Ok).send(mapToPostViewModel(blogById))
-      : res.sendStatus(HttpStatus.NotFound)
+      ? res.status(HttpStatus.Ok_200).send(mapToPostViewModel(blogById))
+      : res.sendStatus(HttpStatus.NotFound_404)
 }

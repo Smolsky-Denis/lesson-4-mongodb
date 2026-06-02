@@ -8,6 +8,6 @@ export const deleteBlogById = async (req: Request<{id: string}>, res: Response) 
 
     const isDeleted = await blogRepository.deleteBlogById(id);
 
-    return isDeleted ? res.sendStatus(HttpStatus.NoContent)
-        : res.sendStatus(HttpStatus.NotFound)
+    return isDeleted ? res.sendStatus(HttpStatus.NoContent_204)
+        : res.sendStatus(HttpStatus.NotFound_404)
 }

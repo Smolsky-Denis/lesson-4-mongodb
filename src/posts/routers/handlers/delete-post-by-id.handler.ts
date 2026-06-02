@@ -9,6 +9,6 @@ export const deletePostById = async (req: Request<{id: string}>, res: Response) 
     const isDeleted = await postRepository.deletePostById(id);
 
     return isDeleted
-        ? res.sendStatus(HttpStatus.NoContent)
-        : res.sendStatus(HttpStatus.NotFound)
+        ? res.sendStatus(HttpStatus.NoContent_204)
+        : res.sendStatus(HttpStatus.NotFound_404)
 }

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import {BlogCreateUpdateDTO, BlogViewModel} from "../../types/blogs-types";
+import {BlogCreateUpdateDTO} from "../../types/blogs-types";
 import {blogRepository} from "../../repositories/blogs.repository";
-import {mapToBlogViewModel} from "../mapers/map-to-blog-view-mode.util";
+import {mapToBlogViewModel} from "../mapers/map-to-blog-view-model.util";
 import {HttpStatus} from "../../../core/types/http-statuses";
 
 export const createNewBlog = async ( req: Request<{},{}, BlogCreateUpdateDTO>, res: Response) => {
@@ -14,5 +14,5 @@ export const createNewBlog = async ( req: Request<{},{}, BlogCreateUpdateDTO>, r
     }
     const blog = await blogRepository.createBlog(newBlog);
 
-    return res.status(HttpStatus.Created).send(mapToBlogViewModel(blog));
+    return res.status(HttpStatus.Created_201).send(mapToBlogViewModel(blog));
 }

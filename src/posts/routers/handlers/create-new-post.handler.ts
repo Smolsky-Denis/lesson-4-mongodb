@@ -19,8 +19,8 @@ export const createNewPost = async ( req: Request<{},{}, PostCreateUpdateDTO>, r
         }
         const post = await postRepository.createPost(newPost);
 
-        return res.status(HttpStatus.Created).send(mapToPostViewModel(post));
+        return res.status(HttpStatus.Created_201).send(mapToPostViewModel(post));
     }
 
-    return res.status(HttpStatus.NotFound).send('the inputModel has incorrect values');
+    return res.status(HttpStatus.NotFound_404).send('the inputModel has incorrect values');
 }

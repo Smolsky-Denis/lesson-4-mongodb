@@ -1,32 +1,34 @@
 import {query} from "express-validator";
 import {SortDirection} from "../../types/sort-direction";
-import {PaginationAndSorting} from "../../types/pagination-and-sorting";
+import {PaginationAndSortingBase} from "../../types/pagination-and-sorting";
+import {Mode} from "../../types/PaginationMode";
 
-const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
-const DEFAULT_SORT_BY = 'createAt';
-const DEFAULT_SEARCH_NAME_TERM = null;
+export const DEFAULT_PAGE_NUMBER = 1;
+export const DEFAULT_PAGE_SIZE = 10;
+export const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
+export const DEFAULT_SORT_BY = 'createAt';
+export const DEFAULT_SEARCH_NAME_TERM = null;
 
-export const paginationAndSortingDefault: PaginationAndSorting<string> = {
-    searchNameTerm: DEFAULT_SEARCH_NAME_TERM,
+export const paginationAndSortingDefault: PaginationAndSortingBase<string> = {
     pageNumber: DEFAULT_PAGE_NUMBER,
     pageSize: DEFAULT_PAGE_SIZE,
     sortBy: DEFAULT_SORT_BY,
     sortDirection: DEFAULT_SORT_DIRECTION,
 };
 
-export const paginationAndSortingValidation =  <T extends string>(sortFieldsEnum: Record<string, T>) => {
+export function createPaginationAndSortingDefault<S>(sortBy: S): PaginationAndSortingBase<S> {
+    return {
+        pageNumber: DEFAULT_PAGE_NUMBER,
+        pageSize: DEFAULT_PAGE_SIZE,
+        sortBy,
+        sortDirection: DEFAULT_SORT_DIRECTION,
+    };
+}
+
+export const paginationAndSortingValidation =  <T extends string>(sortFieldsEnum: Record<string, T>, entityMode: Mode) => {
     const allowedSortFields = Object.values(sortFieldsEnum)
 
-    return [
-        query('searchNameTerm')
-            .default(DEFAULT_SEARCH_NAME_TERM)
-            .optional()
-            .isString()
-            .trim()
-            .isLength({ min: 1, max: 15 }),
-
+    const result = [
         query('pageNumber')
             .default(DEFAULT_PAGE_NUMBER)
             .isInt({ min: 1 })
@@ -53,4 +55,18 @@ export const paginationAndSortingValidation =  <T extends string>(sortFieldsEnum
                 `Sort direction must be one of: ${Object.values(SortDirection).join(', ')}`,
             ),
     ]
+
+    if (entityMode === 'blog') {
+        result.push(
+            query('searchNameTerm')
+                .optional()
+                .default(DEFAULT_SEARCH_NAME_TERM)
+                .optional()
+                .isString()
+                .trim()
+                .isLength({ min: 1, max: 15 }),
+            );
+    }
+
+    return result;
 }
