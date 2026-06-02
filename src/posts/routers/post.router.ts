@@ -8,6 +8,7 @@ import {postInputValidation} from "../validation/posts-dto.validation";
 import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guard-middleware";
 import {idValidation} from "../../core/middlewares/validation/id.validation";
 import {inputValidationMiddleware} from "../../core/middlewares/validation/input-validation.middleware";
+import {extraPostInputBlogIdValidation} from "../validation/extra-input-post-blogId-validation";
 
 export const postsRouter = Router();
 
@@ -19,6 +20,7 @@ postsRouter
     .post(
         '',
         superAdminGuardMiddleware,
+        extraPostInputBlogIdValidation,
         postInputValidation,
         inputValidationMiddleware,
         createNewPost
@@ -27,6 +29,7 @@ postsRouter
         "/:id",
         idValidation,
         superAdminGuardMiddleware,
+        extraPostInputBlogIdValidation,
         postInputValidation,
         inputValidationMiddleware,
         updatePostById

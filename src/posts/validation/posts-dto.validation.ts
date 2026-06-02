@@ -1,5 +1,4 @@
 import {body} from "express-validator";
-import {blogRepository} from "../../blogs/repositories/blogs.repository";
 
 export const postInputValidation = [
     body("title")
@@ -19,13 +18,4 @@ export const postInputValidation = [
     .isString().withMessage("content should be string")
     .trim()
     .isLength({ min: 1, max: 1000 }).withMessage("content should be max 1000 symbols"),
-
-    body("blogId")
-    .exists().withMessage("blogId is required")
-    .isString().withMessage("blogId should be string")
-    .custom((value) => {
-        const blog = blogRepository.findById(value);
-        if (!blog) throw new Error("id does not exist");
-        return true;
-    })
 ];

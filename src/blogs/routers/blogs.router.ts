@@ -46,6 +46,7 @@ blogsRouter
     .post('/:id/posts',
         superAdminGuardMiddleware,
         idValidation,
+        idValidation,
         postInputValidation,
         inputValidationMiddleware,
         createNewPostForBlog,
