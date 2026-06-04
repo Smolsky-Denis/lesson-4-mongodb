@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {BlogCreateUpdateDTO} from "../../types/blogs-types";
+import {BlogCreateUpdateDTO} from "../input/blogs-types";
 import {blogRepository} from "../../repositories/blogs.repository";
 import {HttpStatus} from "../../../core/types/http-statuses";
 import {createErrorMessages} from "../../../core/middlewares/validation/input-validation-result.middleware";

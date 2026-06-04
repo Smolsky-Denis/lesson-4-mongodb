@@ -1,5 +1,5 @@
 import {WithId} from "mongodb";
-import {BlogDBModel} from "../../types/blogs-types";
+import {BlogDBModel} from "../input/blogs-types";
 import {PaginatedOutput} from "../../../core/types/paginated.output";
 import {BlogListPaginatedOutput, BlogOutputViewModel} from "../output/blog.output";
 import {mapToBlogViewModel} from "./map-to-blog-view-model.util";

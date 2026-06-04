@@ -1,7 +1,7 @@
 import {blogRepository} from "../../blogs/repositories/blogs.repository";
 import {postRepository} from "../repositories/posts.repository";
 import {mapToPostViewModel} from "../routers/mapers/map-to-post-view-mode.util";
-import {BlogDBModel} from "../../blogs/types/blogs-types";
+import {BlogDBModel} from "../../blogs/routers/input/blogs-types";
 import {PostCreateUpdateDTO, PostDBModel} from "../types/posts-types";
 import {WithId} from "mongodb";
 import {PostQueryInput} from "../routers/input/post-qury.input";

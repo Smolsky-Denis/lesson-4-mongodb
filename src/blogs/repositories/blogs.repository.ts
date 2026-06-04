@@ -1,4 +1,4 @@
-import {BlogCreateUpdateDTO, BlogDBModel} from "../types/blogs-types";
+import {BlogCreateUpdateDTO, BlogDBModel} from "../routers/input/blogs-types";
 import {blogsCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {BlogQueryInput} from "../routers/input/blog-query.input";

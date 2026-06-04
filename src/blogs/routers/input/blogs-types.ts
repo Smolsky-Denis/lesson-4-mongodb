@@ -1,4 +1,4 @@
-import {BlogOutputViewModel} from "../routers/output/blog.output";
+import {BlogOutputViewModel} from "../output/blog.output";
 
 
 export type BlogCreateUpdateDTO = Pick<
