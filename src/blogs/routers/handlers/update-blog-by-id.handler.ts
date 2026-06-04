@@ -1,19 +1,29 @@
 import {Request, Response} from 'express';
 import {BlogCreateUpdateDTO} from "../input/blogs-types";
-import {blogRepository} from "../../repositories/blogs.repository";
 import {HttpStatus} from "../../../core/types/http-statuses";
 import {createErrorMessages} from "../../../core/middlewares/validation/input-validation-result.middleware";
+import {matchedData} from "express-validator";
+import {blogsService} from "../../application/blogs.service";
 
-export const updateBlogById = async (req: Request<{id: string}, {}, BlogCreateUpdateDTO>, res: Response) => {
+export const updateBlogByIdHandler = async (req: Request<{id: string}, {}, BlogCreateUpdateDTO>, res: Response) => {
     try {
-        const id: string = req.params.id
-        const blogById = await blogRepository.findById(id)
+        const sanitizedQuery = matchedData<{id: string}>(req,{
+            locations: ['query'],
+            includeOptionals: true,
+        })
+
+        const sanitizedBody = matchedData<BlogCreateUpdateDTO>(req,{
+            locations: ['body'],
+            includeOptionals: true,
+        })
+
+        const blogById = await blogsService.findById(sanitizedQuery.id)
 
         if (!blogById) {
             return res.status(HttpStatus.NotFound_404).send(createErrorMessages(
                 [
                     {
-                        field: id, message: `No blog with id ${id} found.`
+                        field: sanitizedQuery.id, message: `No blog with id ${sanitizedQuery.id} found.`
                     }
                 ]
             )
@@ -21,7 +31,7 @@ export const updateBlogById = async (req: Request<{id: string}, {}, BlogCreateUp
 
         }
 
-        await blogRepository.updateBlog(id, req.body)
+        await blogsService.updateById(sanitizedQuery.id, sanitizedBody)
         return res.sendStatus(HttpStatus.NoContent_204);
 
     } catch (e: unknown){

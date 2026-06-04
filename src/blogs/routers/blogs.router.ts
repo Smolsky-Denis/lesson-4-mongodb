@@ -1,9 +1,9 @@
 import {Router} from "express";
 import { getBlogListHandler} from "./handlers/get-blog-list.handler";
 import {createNewBlogHandler} from "./handlers/create-new-blog.handler";
-import {updateBlogById} from "./handlers/update-blog-by-id.handler";
-import {getBlogById} from "./handlers/get-blog-by-id.handler";
-import {deleteBlogById} from "./handlers/delete-blog-by-id.handler";
+import {updateBlogByIdHandler} from "./handlers/update-blog-by-id.handler";
+import {getBlogByIdHandler} from "./handlers/get-blog-by-id.handler";
+import {deleteBlogByIdHandler} from "./handlers/delete-blog-by-id.handler";
 import {blogInputDtoValidation} from "../validation/blogs-input-dto.validation";
 import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guard-middleware";
 import {inputValidationMiddleware} from "../../core/middlewares/validation/input-validation.middleware";
@@ -28,7 +28,7 @@ blogsRouter
         '/:id',
         idValidation,
         inputValidationMiddleware,
-        getBlogById
+        getBlogByIdHandler
     )
     .get(
         '/:id/posts',
@@ -57,12 +57,12 @@ blogsRouter
         idValidation,
         blogInputDtoValidation,
         inputValidationMiddleware,
-        updateBlogById
+        updateBlogByIdHandler
     )
     .delete(
         '/:id',
         superAdminGuardMiddleware,
         idValidation,
         inputValidationMiddleware,
-        deleteBlogById
+        deleteBlogByIdHandler
     )
