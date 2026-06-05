@@ -1,25 +1,33 @@
 import {Request, Response} from 'express';
-import {PostCreateUpdateDTO, PostViewModel} from "../../types/posts-types";
-import {postRepository} from "../../repositories/posts.repository";
-import {mapToPostViewModel} from "../mapers/map-to-post-view-mode.util";
+import {PostCreateUpdateDTO} from "../../types/posts-types";
+// import {mapToPostViewModel} from "../mapers/map-to-post-view-mode.util";
 import {HttpStatus} from "../../../core/types/http-statuses";
-import {blogRepository} from "../../../blogs/repositories/blogs.repository";
+import {matchedData} from "express-validator";
+import {blogsService} from "../../../blogs/application/blogs.service";
+import {postsService} from "../../application/posts.service";
 
-export const createNewPost = async ( req: Request<{},{}, PostCreateUpdateDTO>, res: Response) => {
-    const blogDbById = await blogRepository.findById(req.body.blogId)
+export const createNewPostHandler = async ( req: Request<{},{}, PostCreateUpdateDTO>, res: Response) => {
+
+    const sanitizedBody = matchedData<PostCreateUpdateDTO>(req, {
+        locations: ['body'],
+        includeOptionals: true,
+    })
+
+    const blogDbById = await blogsService.findById(sanitizedBody.blogId)
 
     if(blogDbById){
         const newPost = {
-            title: req.body.title,
-            shortDescription: req.body.shortDescription,
-            content: req.body.content,
-            blogId: req.body.blogId,
+            title: sanitizedBody.title,
+            shortDescription: sanitizedBody.shortDescription,
+            content: sanitizedBody.content,
+            blogId: sanitizedBody.blogId,
             blogName: blogDbById.name,
             createdAt: new Date(),
         }
-        const post = await postRepository.createPost(newPost);
+        const post = await postsService.create(sanitizedBody.blogId, blogDbById, newPost);
 
-        return res.status(HttpStatus.Created_201).send(mapToPostViewModel(post));
+        // return res.status(HttpStatus.Created_201).send(mapToPostViewModel(post));
+        return res.status(HttpStatus.Created_201).send(post);
     }
 
     return res.status(HttpStatus.NotFound_404).send('the inputModel has incorrect values');

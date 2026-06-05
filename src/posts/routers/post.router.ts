@@ -1,9 +1,9 @@
 import {Router} from "express";
-import {getPostList} from "./handlers/get-post-list.handler";
-import {createNewPost} from "./handlers/create-new-post.handler";
-import {updatePostById} from "./handlers/update-post-by-id.handler";
-import {getPostById} from "./handlers/get-post-by-id.handler";
-import {deletePostById} from "./handlers/delete-post-by-id.handler";
+import {getPostListHandler} from "./handlers/get-post-list.handler";
+import {createNewPostHandler} from "./handlers/create-new-post.handler";
+import {updatePostByIdHandler} from "./handlers/update-post-by-id.handler";
+import {getPostByIdHandler} from "./handlers/get-post-by-id.handler";
+import {deletePostByIdHandler} from "./handlers/delete-post-by-id.handler";
 import {postInputValidation} from "../validation/posts-dto.validation";
 import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guard-middleware";
 import {idValidation} from "../../core/middlewares/validation/id.validation";
@@ -15,7 +15,7 @@ export const postsRouter = Router();
 postsRouter
     .get(
         '',
-        getPostList
+        getPostListHandler
     )
     .post(
         '',
@@ -23,7 +23,7 @@ postsRouter
         extraPostInputBlogIdValidation,
         postInputValidation,
         inputValidationMiddleware,
-        createNewPost
+        createNewPostHandler
     )
     .put(
         "/:id",
@@ -32,18 +32,18 @@ postsRouter
         extraPostInputBlogIdValidation,
         postInputValidation,
         inputValidationMiddleware,
-        updatePostById
+        updatePostByIdHandler
     )
     .get(
         '/:id',
         idValidation,
         inputValidationMiddleware,
-        getPostById
+        getPostByIdHandler
     )
     .delete(
         '/:id',
         superAdminGuardMiddleware,
         idValidation,
         inputValidationMiddleware,
-        deletePostById
+        deletePostByIdHandler
     )

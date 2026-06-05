@@ -2,9 +2,11 @@ import {PostCreateUpdateDTO, PostDBModel} from "../types/posts-types";
 import {ObjectId, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
 import {PostQueryInput} from "../routers/input/post-qury.input";
+import {PaginationAndSortingBase} from "../../core/types/pagination-and-sorting";
 
 export const postRepository = {
-    async findPostListByBlogId(id: string, queryDTO: PostQueryInput): Promise<{items: WithId<PostDBModel>[]; totalCount: number}> {
+    async findPostListByBlogId(id: string, queryDTO: PostQueryInput)
+        : Promise<{items: WithId<PostDBModel>[]; totalCount: number}> {
         const {
             pageNumber,
             pageSize,
@@ -13,7 +15,7 @@ export const postRepository = {
         } = queryDTO;
 
         const skip = (pageNumber -1) * pageSize;
-        const filter: any = {};
+        const filter = {blogId: id};
 
         const items: WithId<PostDBModel>[] = await postsCollection
             .find(filter)
@@ -27,8 +29,28 @@ export const postRepository = {
         return { items, totalCount };
     },
 
-    async findAll(): Promise<WithId<PostDBModel>[]> {
-        return postsCollection.find().toArray()
+    async findAll(queryDTO: PaginationAndSortingBase<string>)
+        : Promise<{items: WithId<PostDBModel>[]; totalCount: number}>  {
+        const {
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection
+        } = queryDTO;
+
+        const skip = (pageNumber -1) * pageSize;
+        const filter: any = {};
+
+        const items: WithId<PostDBModel>[] = await postsCollection
+        .find(filter)
+        .sort({[sortBy]: sortDirection })
+        .skip(skip)
+        .limit(pageSize)
+        .toArray()
+
+        const totalCount =await postsCollection.countDocuments(filter);
+
+        return { items, totalCount };
     },
 
     async createPost(newPost: PostDBModel): Promise<WithId<PostDBModel>> {

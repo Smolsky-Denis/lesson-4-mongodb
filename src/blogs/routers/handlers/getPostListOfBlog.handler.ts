@@ -7,7 +7,10 @@ import {setDefaultSortAndPaginationIfNotExist} from "../../../core/helpers/set-d
 import {mapToPostListPaginatedOutput} from "../../../posts/mapers/map-to-post-list-paginated-output.util";
 
 export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res: Response) => {
-    const id: string = req.params.id;
+    const sanitizedParams = matchedData<{id: string}>(req,{
+        locations: ['params'],
+        includeOptionals: true,
+    })
     const sanitizedQuery = matchedData<PostQueryInput>(req, {
         locations: ['query'],
         includeOptionals: true,
@@ -15,7 +18,7 @@ export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res:
 
     const queryInput: PostQueryInput = setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post')
     const {pageNumber, pageSize} = queryInput
-    const {items, totalCount} = await postsService.findMany(id, sanitizedQuery)
+    const {items, totalCount} = await postsService.findMany(sanitizedParams.id, sanitizedQuery)
 
     const result = mapToPostListPaginatedOutput(
         items,

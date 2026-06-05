@@ -1,17 +1,37 @@
 import {Request, Response} from 'express';
-import {postRepository} from "../../repositories/posts.repository";
-import {mapToPostViewModel} from "../mapers/map-to-post-view-mode.util";
 import {HttpStatus} from "../../../core/types/http-statuses";
+import {matchedData} from "express-validator";
+import {BlogQueryInput} from "../../../blogs/routers/input/blog-query.input";
+import {setDefaultSortAndPaginationIfNotExist} from "../../../core/helpers/set-default-sort-and-pagination";
+import {PaginationAndSortingBase} from "../../../core/types/pagination-and-sorting";
+import {postsService} from "../../application/posts.service";
+import {mapToBlogListPaginatedOutput} from "../mapers/map-to-post-list-paginated-output.util";
 
-
-export const getPostList = async (req: Request, res: Response) => {
+export const getPostListHandler = async (req: Request, res: Response) => {
 
     try {
-    const postList = await postRepository.findAll()
-    const postViewModel = postList.map(mapToPostViewModel)
+        const sanitizedQuery = matchedData<BlogQueryInput>(req, {
+            locations: ['query'],
+            includeOptionals: true,
+        })
 
-    res.status(HttpStatus.Ok_200).send(postViewModel)
+        const queryInput: PaginationAndSortingBase<string> =
+            setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post');
+        const {pageNumber, pageSize} = queryInput;
+        const {items, totalCount} = await postsService.findFullList(queryInput);
+
+        const result = mapToBlogListPaginatedOutput(
+            items,
+            {
+                pagesCount: Math.ceil(totalCount / pageSize),
+                page: pageNumber,
+                pageSize: pageSize,
+                totalCount,
+            }
+        );
+
+        return res.status(HttpStatus.Ok_200).send(result);
     } catch (error) {
-        res.sendStatus(HttpStatus.BadRequest_400)
+        res.sendStatus(HttpStatus.BadRequest_400);
     }
 }
