@@ -13,7 +13,7 @@ export const createNewBlogHandler = async ( req: Request<{},{}, BlogCreateUpdate
     const newBlog = {
         ...sanitizedBody,
         createdAt: new Date(),
-        isMembership: true
+        isMembership: false
     }
     const blog = await blogsService.create(newBlog);
 
