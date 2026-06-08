@@ -7,8 +7,8 @@ import {blogsService} from "../../application/blogs.service";
 
 export const updateBlogByIdHandler = async (req: Request<{id: string}, {}, BlogCreateUpdateDTO>, res: Response) => {
     try {
-        const sanitizedQuery = matchedData<{id: string}>(req,{
-            locations: ['query'],
+        const sanitizedParams = matchedData<{id: string}>(req,{
+            locations: ['params'],
             includeOptionals: true,
         })
 
@@ -17,13 +17,13 @@ export const updateBlogByIdHandler = async (req: Request<{id: string}, {}, BlogC
             includeOptionals: true,
         })
 
-        const blogById = await blogsService.findById(sanitizedQuery.id)
+        const blogById = await blogsService.findById(sanitizedParams.id)
 
         if (!blogById) {
             return res.status(HttpStatus.NotFound_404).send(createErrorMessages(
                 [
                     {
-                        field: sanitizedQuery.id, message: `No blog with id ${sanitizedQuery.id} found.`
+                        field: sanitizedParams.id, message: `No blog with id ${sanitizedParams.id} found.`
                     }
                 ]
             )
@@ -31,7 +31,7 @@ export const updateBlogByIdHandler = async (req: Request<{id: string}, {}, BlogC
 
         }
 
-        await blogsService.updateById(sanitizedQuery.id, sanitizedBody)
+        await blogsService.updateById(sanitizedParams.id, sanitizedBody)
         return res.sendStatus(HttpStatus.NoContent_204);
 
     } catch (e: unknown){
