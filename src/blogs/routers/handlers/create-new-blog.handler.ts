@@ -10,6 +10,7 @@ export const createNewBlogHandler = async ( req: Request<{},{}, BlogCreateUpdate
         locations: ['body'],
         includeOptionals: true,
     })
+
     const newBlog = {
         ...sanitizedBody,
         createdAt: new Date(),
