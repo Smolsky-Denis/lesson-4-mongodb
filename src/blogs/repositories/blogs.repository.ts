@@ -19,10 +19,10 @@ export const blogRepository = {
         if (searchNameTerm) {
             filter.name = { $regex: searchNameTerm, $options: 'i' };
         }
-
+        const direction = sortDirection === 'asc' ? 1 : -1;
         const items: WithId<BlogDBModel>[] = await blogsCollection
             .find(filter)
-            .sort({[sortBy]: sortDirection })
+            .sort({[sortBy]: direction })
             .skip(skip)
             .limit(pageSize)
             .toArray()
@@ -32,10 +32,10 @@ export const blogRepository = {
         return { items, totalCount };
     },
 
-    async findAll(): Promise<
-        WithId<BlogDBModel>[]> {
-        return blogsCollection.find().toArray()
-    },
+    // async findAll(): Promise<
+    //     WithId<BlogDBModel>[]> {
+    //     return blogsCollection.find().toArray()
+    // },
 
     async createBlog(newBlog: BlogDBModel): Promise<WithId<BlogDBModel>> {
         const insertResult = await blogsCollection.insertOne(newBlog);
