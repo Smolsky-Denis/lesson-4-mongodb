@@ -1,6 +1,6 @@
 import { Collection, WithId } from "mongodb";
 import {PaginationResult} from "../types/pagination";
-
+//TODO посмотреть для чего нужно
 export async function paginate<T extends Document>(
     collection: Collection<T>,
     filter: any,

@@ -5,7 +5,7 @@ import {PostQueryInput} from "../routers/input/post-qury.input";
 import {PaginationAndSortingBase} from "../../core/types/pagination-and-sorting";
 
 export const postRepository = {
-    async findPostListByBlogId(id: string, queryDTO: PostQueryInput)
+    async findPostListByBlogId(blogId: string, queryDTO: PostQueryInput)
         : Promise<{items: WithId<PostDBModel>[]; totalCount: number}> {
         const {
             pageNumber,
@@ -15,7 +15,7 @@ export const postRepository = {
         } = queryDTO;
 
         const skip = (pageNumber -1) * pageSize;
-        const filter = {blogId: id};
+        const filter = {blogId};
 
         const items: WithId<PostDBModel>[] = await postsCollection
             .find(filter)

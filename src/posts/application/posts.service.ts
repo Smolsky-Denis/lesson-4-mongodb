@@ -7,9 +7,9 @@ import {PostQueryInput} from "../routers/input/post-qury.input";
 import {PaginationAndSortingBase} from "../../core/types/pagination-and-sorting";
 
 export const postsService = {       //todo создать PostQueryInput
-    async findMany(id: string, queryDTO: PostQueryInput)
+    async findMany(blogId: string, queryDTO: PostQueryInput)
             : Promise<{items: WithId<PostDBModel>[], totalCount: number}> {
-        return postRepository.findPostListByBlogId(id, queryDTO)
+        return postRepository.findPostListByBlogId(blogId, queryDTO)
     },
 
     async findFullList(queryDTO: PaginationAndSortingBase<string>)

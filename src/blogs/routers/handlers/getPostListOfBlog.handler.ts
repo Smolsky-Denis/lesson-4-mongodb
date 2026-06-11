@@ -11,23 +11,26 @@ export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res:
         locations: ['params'],
         includeOptionals: true,
     })
-    const sanitizedQuery = matchedData<PostQueryInput>(req, {
-        locations: ['query'],
-        includeOptionals: true,
-    })
+    if (sanitizedParams.id) {
+        const sanitizedQuery = matchedData<PostQueryInput>(req, {
+            locations: ['query'],
+            includeOptionals: true,
+        })
 
-    const queryInput: PostQueryInput = setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post')
-    const {pageNumber, pageSize} = queryInput
-    const {items, totalCount} = await postsService.findMany(sanitizedParams.id, sanitizedQuery)
+        const queryInput: PostQueryInput = setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post')
+        const {pageNumber, pageSize} = queryInput
+        const {items, totalCount} = await postsService.findMany(sanitizedParams.id, sanitizedQuery)
 
-    const result = mapToPostListPaginatedOutput(
-        items,
-        {
-            pagesCount: Math.ceil(totalCount / pageSize),
-            page: pageNumber,
-            pageSize: pageSize,
-            totalCount,
-        }
-    )
-    return res.status(HttpStatus.Ok_200).send(result);
+        const result = mapToPostListPaginatedOutput(
+            items,
+            {
+                pagesCount: Math.ceil(totalCount / pageSize),
+                page: pageNumber,
+                pageSize: pageSize,
+                totalCount,
+            }
+        )
+        return res.status(HttpStatus.Ok_200).send(result);
+    }
+    return res.status(HttpStatus.NotFound_404).send('the id incorrect values');
 }
