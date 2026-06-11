@@ -5,13 +5,16 @@ import {matchedData} from "express-validator";
 import {PostQueryInput} from "../../../posts/routers/input/post-qury.input";
 import {setDefaultSortAndPaginationIfNotExist} from "../../../core/helpers/set-default-sort-and-pagination";
 import {mapToPostListPaginatedOutput} from "../../../posts/mapers/map-to-post-list-paginated-output.util";
+import {blogsService} from "../../application/blogs.service";
 
 export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res: Response) => {
     const sanitizedParams = matchedData<{id: string}>(req,{
         locations: ['params'],
         includeOptionals: true,
     })
-    if (sanitizedParams.id) {
+
+    const blogById = await blogsService.findById(sanitizedParams.id)
+    if (blogById && sanitizedParams.id) {
         const sanitizedQuery = matchedData<PostQueryInput>(req, {
             locations: ['query'],
             includeOptionals: true,

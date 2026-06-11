@@ -6,14 +6,14 @@ import {matchedData} from "express-validator";
 import {blogsService} from "../../application/blogs.service";
 
 export const createNewPostForBlog = async ( req: Request<{id: string},{}, PostCreateUpdateDTO>, res: Response) => {
-    const sanitizeParams = matchedData<{ id: string }>(req, {
+    const sanitizedParams = matchedData<{ id: string }>(req, {
         locations: (['params']),
         includeOptionals: true,
     });
 
-    const blogById = await blogsService.findById(sanitizeParams.id)
+    const blogById = await blogsService.findById(sanitizedParams.id)
 
-    if (blogById) {
+    if (blogById && sanitizedParams.id) {
         const newPost = await postsService.create(req.params.id ,blogById, req.body)
 
         return res.status(HttpStatus.Created_201).send(newPost);
