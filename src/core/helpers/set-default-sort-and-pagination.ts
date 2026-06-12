@@ -26,7 +26,7 @@ export function setDefaultSortAndPaginationIfNotExist<
             ...query,
         } as any;
     }
-debugger
+
     return {
         ...base,
         ...query,

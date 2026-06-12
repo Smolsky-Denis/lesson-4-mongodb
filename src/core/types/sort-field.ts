@@ -1,5 +1,5 @@
 export enum SortField {
     CreatedAt = 'createdAt',
-    Title = 'Title',
+    Title = 'title',
     Name = 'name',
 }
