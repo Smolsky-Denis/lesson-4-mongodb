@@ -5,7 +5,6 @@ import {mapToBlogViewModel} from "../mapers/map-to-blog-view-model.util";
 import {matchedData} from "express-validator";
 
 export const getBlogByIdHandler = async (req: Request<{id: string}>, res: Response) => {
-
     const sanitizeParams = matchedData<{ id: string }>(req, {
         locations: (['params']),
         includeOptionals: true,
