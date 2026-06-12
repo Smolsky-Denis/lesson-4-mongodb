@@ -20,7 +20,6 @@ export const getPostListOfBlogHandler = async (req: Request<{id: string} >, res:
             includeOptionals: true,
         })
         const queryInput: PostQueryInput = setDefaultSortAndPaginationIfNotExist(sanitizedQuery, 'post')
-        debugger
         const {pageNumber, pageSize} = queryInput
         const {items, totalCount} = await postsService.findMany(sanitizedParams.id, sanitizedQuery)
 

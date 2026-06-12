@@ -6,7 +6,6 @@ import {blogsService} from "../../../blogs/application/blogs.service";
 import {postsService} from "../../application/posts.service";
 
 export const createNewPostHandler = async ( req: Request<{},{}, PostCreateUpdateDTO>, res: Response) => {
-
     const sanitizedBody = matchedData<PostCreateUpdateDTO>(req, {
         locations: ['body'],
         includeOptionals: true,
