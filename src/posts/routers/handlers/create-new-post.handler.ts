@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import {PostCreateUpdateDTO} from "../../types/posts-types";
-// import {mapToPostViewModel} from "../mapers/map-to-post-view-mode.util";
 import {HttpStatus} from "../../../core/types/http-statuses";
 import {matchedData} from "express-validator";
 import {blogsService} from "../../../blogs/application/blogs.service";
@@ -26,7 +25,6 @@ export const createNewPostHandler = async ( req: Request<{},{}, PostCreateUpdate
         }
         const post = await postsService.create(sanitizedBody.blogId, blogDbById, newPost);
 
-        // return res.status(HttpStatus.Created_201).send(mapToPostViewModel(post));
         return res.status(HttpStatus.Created_201).send(post);
     }
 
