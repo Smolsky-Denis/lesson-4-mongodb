@@ -36,7 +36,6 @@ export const postRepository = {
             sortBy,
             sortDirection
         } = queryDTO;
-
         const skip = (pageNumber -1) * pageSize;
         const filter: any = {};
         const items: WithId<PostDBModel>[] = await postsCollection
