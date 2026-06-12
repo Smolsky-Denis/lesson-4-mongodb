@@ -1,4 +1,4 @@
 export enum SortField {
-    Name = 'name',
     CreatedAt = 'createdAt',
+    Name = 'name',
 }

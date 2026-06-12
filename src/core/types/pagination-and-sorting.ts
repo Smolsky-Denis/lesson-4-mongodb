@@ -9,7 +9,4 @@ export type PaginationAndSortingBase<S> = {
 
 export type BlogsPaginationAndSorting<S> = PaginationAndSortingBase<S> & {
     searchNameTerm: string | null;
-
 };
-
-export type PostsPaginationAndSorting<S> = PaginationAndSortingBase<S>
