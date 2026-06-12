@@ -1,6 +1,5 @@
 import {query} from "express-validator";
 import {SortDirection} from "../../types/sort-direction";
-// import {PaginationAndSortingBase} from "../../types/pagination-and-sorting";
 import {Mode} from "../../types/PaginationMode";
 
 export const DEFAULT_PAGE_NUMBER = 1;
@@ -8,22 +7,6 @@ export const DEFAULT_PAGE_SIZE = 10;
 export const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
 export const DEFAULT_SORT_BY = 'createAt';
 export const DEFAULT_SEARCH_NAME_TERM = null;
-
-// export const paginationAndSortingDefault: PaginationAndSortingBase<string> = {
-//     pageNumber: DEFAULT_PAGE_NUMBER,
-//     pageSize: DEFAULT_PAGE_SIZE,
-//     sortBy: DEFAULT_SORT_BY,
-//     sortDirection: DEFAULT_SORT_DIRECTION,
-// };
-//
-// export function createPaginationAndSortingDefault<S>(sortBy: S): PaginationAndSortingBase<S> {
-//     return {
-//         pageNumber: DEFAULT_PAGE_NUMBER,
-//         pageSize: DEFAULT_PAGE_SIZE,
-//         sortBy,
-//         sortDirection: DEFAULT_SORT_DIRECTION,
-//     };
-// }
 
 export const paginationAndSortingValidation =  <T extends string>(sortFieldsEnum: Record<string, T>, entityMode: Mode) => {
     const allowedSortFields = Object.values(sortFieldsEnum)

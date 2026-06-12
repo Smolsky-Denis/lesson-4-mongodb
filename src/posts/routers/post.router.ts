@@ -9,12 +9,17 @@ import {superAdminGuardMiddleware} from "../../auth/middlewares/super-admin.guar
 import {idValidation} from "../../core/middlewares/validation/id.validation";
 import {inputValidationMiddleware} from "../../core/middlewares/validation/input-validation.middleware";
 import {extraPostInputBlogIdValidation} from "../validation/extra-input-post-blogId-validation";
+import {
+    paginationAndSortingValidation
+} from "../../core/middlewares/validation/query-pagination-sorting.validation-middleware";
+import {SortField} from "../../core/types/sort-field";
 
 export const postsRouter = Router();
 
 postsRouter
     .get(
         '',
+        paginationAndSortingValidation(SortField, 'post'),
         getPostListHandler
     )
     .post(

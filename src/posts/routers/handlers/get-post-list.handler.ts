@@ -8,7 +8,8 @@ import {postsService} from "../../application/posts.service";
 import {mapToBlogListPaginatedOutput} from "../mapers/map-to-post-list-paginated-output.util";
 
 export const getPostListHandler = async (req: Request, res: Response) => {
-
+    const query = req.query;
+    debugger
     try {
         const sanitizedQuery = matchedData<BlogQueryInput>(req, {
             locations: ['query'],

@@ -9,7 +9,7 @@ export const getPostByIdHandler = async (req: Request<{id: string}>, res: Respon
         locations: ['params'],
         includeOptionals: true,
     })
-        const postById = await postsService.findById(sanitizedParams.id)
+    const postById = await postsService.findById(sanitizedParams.id)
 
   return  postById
       ? res.status(HttpStatus.Ok_200).send(mapToPostViewModel(postById))
