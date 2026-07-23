@@ -2,7 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import { setupApp } from './setup-app';
 import { SETTINGS } from './core/settings/settings';
-import { runDB } from './db/mongo.db';
+import { runWriteDB } from './db/mongo.write.db';
+import {runReadDB} from "./db/mongo.read.db";
 
 const bootstrap = async () => {
     const app = express();
@@ -11,7 +12,8 @@ const bootstrap = async () => {
 
     const PORT = SETTINGS.PORT;
 
-    await runDB(SETTINGS.MONGO_URL);
+    await runWriteDB(SETTINGS.MONGO_URL);
+    await runReadDB(SETTINGS.MONGO_URL)
 
     app.listen(PORT, () => {
         console.log(`Example app listening on port ${PORT}`);

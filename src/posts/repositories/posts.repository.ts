@@ -1,6 +1,6 @@
 import {PostCreateUpdateDTO, PostDBModel} from "../types/posts-types";
 import {ObjectId, WithId} from "mongodb";
-import {postsCollection} from "../../db/mongo.db";
+import {postsCollection} from "../../db/mongo.write.db";
 import {PostQueryInput} from "../routers/input/post-qury.input";
 import {PaginationAndSortingBase} from "../../core/types/pagination-and-sorting";
 

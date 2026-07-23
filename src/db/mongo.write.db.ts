@@ -2,25 +2,33 @@ import {Collection, MongoClient} from "mongodb";
 import {SETTINGS} from "../core/settings/settings";
 import {BlogDBModel} from "../blogs/routers/input/blogs-types";
 import {PostDBModel} from "../posts/types/posts-types";
+import {startUserChangeStream} from "./change-streams/start-user-change-stream";
 
+const USERS_DB_COLLECTION_NAME = 'users';
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
 
-export let client: MongoClient;
+export let writeClient : MongoClient;
+export let userDbCollection: Collection; //TODO добавить Type <....>
 export let blogsCollection: Collection<BlogDBModel>;
 export let postsCollection: Collection<PostDBModel>;
-export async function runDB(url: string): Promise<void> {
-    client = new MongoClient(url);
-    const db = await client.db(SETTINGS.DB_NAME);
 
+export async function runWriteDB(url: string): Promise<void> {
+    writeClient  = new MongoClient(url);
+    const db = writeClient .db(SETTINGS.DB_WRITE_NAME);
+
+    userDbCollection = db.collection(USERS_DB_COLLECTION_NAME)
     blogsCollection = db.collection(BLOGS_COLLECTION_NAME);
     postsCollection = db.collection(POSTS_COLLECTION_NAME);
+
+    startUserChangeStream(userDbCollection)
+
     try {
-        await client.connect()
+        await writeClient .connect()
         await db.command({ping: 1})
         console.log('Connected to DB');
     } catch (e) {
-        await client.close();
+        await writeClient .close();
         throw new Error('Database is not connected');
     }
 }
